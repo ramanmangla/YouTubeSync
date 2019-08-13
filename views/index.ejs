@@ -13,6 +13,10 @@
 
     <!-- Bootstrap core CSS -->
     <link href="css/bootstrap.min.css" rel="stylesheet" />
+    <link
+      href="//netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap-glyphicons.css"
+      rel="stylesheet"
+    />
 
     <!-- Custom styles for this template -->
     <link href="css/main.css" rel="stylesheet" />
@@ -51,6 +55,20 @@
     <div class="container-fluid">
       <!-- 1. The <iframe> (and video player) will replace this <div> tag. -->
       <div id="player"></div>
+      <div id="controls">
+        <div>
+          <button id="playVideo" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-play" aria-hidden="true"></span>
+          </button>
+          <button id="pauseVideo" type="button" class="btn btn-default">
+            <span class="glyphicon glyphicon-pause" aria-hidden="true"></span>
+          </button>
+        </div>
+        <div id="progressBar">
+          <div id="line"></div>
+          <div id="marker"></div>
+        </div>
+      </div>
     </div>
     <!-- /.container -->
 
@@ -82,27 +100,55 @@
           events: {
             onReady: onPlayerReady,
             onStateChange: onPlayerStateChange
+          },
+          playerVars: {
+            controls: 0,
+            disablekb: 1,
+            modestbranding: 1,
+            disablekb: 0,
+            rel: 0
           }
         });
       }
 
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
+        progressBarLoop();
         event.target.playVideo();
       }
 
       // 5. The API calls this function when the player's state changes.
       //    The function indicates that when playing a video (state=1),
-      //    the player should play for six seconds and then stop.
-      var done = false;
       function onPlayerStateChange(event) {
-        if (event.data == YT.PlayerState.PLAYING && !done) {
+        console.log(event.data);
+        if (event.data == YT.PlayerState.PLAYING) {
           // setTimeout(stopVideo, 6000);
           // done = true;
         }
       }
       function stopVideo() {
         player.stopVideo();
+      }
+
+      function progressBarLoop() {
+        var progressBar = $('#progressBar');
+        var progressMarker = $('#marker');
+
+        // On click event handler for seeking
+        progressBar.on('click', event => {
+          // Getting the relative left offset of mouse click
+          // and seeking to the time
+          seekFraction =
+            (event.pageX - progressBar.offset().left) / progressBar.width();
+          player.seekTo(seekFraction * player.getDuration(), true);
+        });
+
+        setInterval(() => {
+          // Marker position in fraction of total width of bar
+          var markerPosition =
+            (player.getCurrentTime() / player.getDuration()) * 100;
+          progressMarker.css('left', String(markerPosition) + '%');
+        }, 200);
       }
     </script>
   </body>

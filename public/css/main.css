@@ -1,13 +1,53 @@
+* {
+  box-sizing: border-box;
+}
+
 body {
   padding-top: 50px;
 }
 
 .container-fluid {
   display: flex;
+  flex-direction: column;
   justify-content: center;
   align-items: center;
   padding-top: 10vh;
 }
 
-#player {
+#controls {
+  width: 800px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 10px;
+}
+
+#progressBar {
+  position: relative;
+  flex: 1;
+  height: 30px;
+  margin-left: 15px;
+}
+
+#line {
+  position: relative;
+  z-index: 1;
+  top: 50%;
+  transform: translateY(-50%);
+  height: 2px;
+  width: 100%;
+  background: #222;
+}
+
+#marker {
+  position: absolute;
+  z-index: 2;
+  top: 50%;
+  left: 0;
+  transform: translate(-50%, -50%);
+  width: 15px;
+  height: 15px;
+  border: 2px solid #222;
+  background: #fff;
+  border-radius: 50%;
 }
