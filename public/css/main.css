@@ -1,10 +1,13 @@
 body {
   padding-top: 50px;
 }
-.starter-template {
-  padding: 40px 15px;
-  text-align: center;
+
+.container-fluid {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding-top: 10vh;
 }
-#headshot {
-    width: 500px;
+
+#player {
 }
