@@ -11,8 +11,16 @@ app.set('view engine', 'ejs');
 
 app.get('/', (req, res) => res.render('index'));
 
-app.listen(PORT, () => console.log(`Listening on ${PORT}`));
+http.listen(PORT, () => console.log(`Listening on ${PORT}`));
 
 io.on('connection', socket => {
   console.log('a user connected');
+
+  socket.on('playerEvent', function(data) {
+    io.emit('playerEvent', data);
+  });
+
+  socket.on('disconnect', function() {
+    console.log('user disconnected');
+  });
 });
