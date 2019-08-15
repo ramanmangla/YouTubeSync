@@ -1,30 +1,16 @@
-# node-js-template
-
-A barebones Node.js app using [Express 4](http://expressjs.com/).
-
-This application supports the [Getting Started with Node on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs) article - check it out.
+# YouTubeSync
+A web application to watch YouTube videos in sync with your friends. 
 
 ## Running Locally
 
-Make sure you have [Node.js](http://nodejs.org/) and the [Heroku CLI](https://cli.heroku.com/) installed.
+* Make sure you have [Node.js](http://nodejs.org/) installed.
+* Clone the repository.
 
 ```sh
-$ git clone git@github.com:jomaoppa/node-js-template.git # or clone your own fork
-$ cd node-js-template
+$ cd YouTubeSync
 $ npm install
 $ npm start
 ```
 
-Your app should now be running on [localhost:5000](http://localhost:5000/).
-
-## Deploying to Heroku
-
-```
-$ heroku create
-$ git push heroku master
-$ heroku open
-```
-or
-
-[![Deploy to Heroku](https://www.herokucdn.com/deploy/button.png)](https://heroku.com/deploy)
+Your app should now be running on [localhost:5000](http://localhost:5000/)
 
