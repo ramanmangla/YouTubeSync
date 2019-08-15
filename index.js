@@ -17,6 +17,7 @@ io.on('connection', socket => {
   console.log('a user connected');
 
   socket.on('playerEvent', function(data) {
+    console.log(data);
     io.emit('playerEvent', data);
   });
 

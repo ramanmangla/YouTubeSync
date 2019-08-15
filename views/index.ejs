@@ -92,6 +92,7 @@
       // This function creates an <iframe> (and YouTube player)
       // after the API code downloads.
       var player;
+
       function onYouTubeIframeAPIReady() {
         player = new YT.Player('player', {
           height: '480',
@@ -111,11 +112,32 @@
         });
       }
 
+      function initializeButtons() {
+        $('#playVideo').on('click', event => {
+          let data = { event: 'play', time: player.getCurrentTime() };
+          socket.emit('playerEvent', data);
+        });
+
+        $('#pauseVideo').on('click', event => {
+          let data = { event: 'pause', time: player.getCurrentTime() };
+          socket.emit('playerEvent', data);
+        });
+
+        socket.on('playerEvent', function(data) {
+          if (data.event == 'play') {
+            player.playVideo();
+          } else if (data.event == 'pause') {
+            player.pauseVideo();
+          } else {
+            player.seekTo(data.time);
+          }
+        });
+      }
+
       // 4. The API will call this function when the video player is ready.
       function onPlayerReady(event) {
         progressBarLoop();
         initializeButtons();
-        event.target.playVideo();
       }
 
       // 5. The API calls this function when the player's state changes.
@@ -138,7 +160,11 @@
           // and seeking to the time
           let seekFraction =
             (event.pageX - progressBar.offset().left) / progressBar.width();
-          player.seekTo(seekFraction * player.getDuration(), true);
+          let data = {
+            event: 'seek',
+            time: seekFraction * player.getDuration()
+          };
+          socket.emit('playerEvent', data);
         });
 
         // Update marker position
@@ -149,54 +175,6 @@
           progressMarker.css('left', String(markerPosition) + '%');
         }, 200);
       }
-
-      function initializeButtons() {
-        $('#playVideo').on('click', event => {
-          let data = { event: 'play', time: player.getCurrentTime() };
-          socket.emit('playerEvent', data);
-        });
-
-        $('#pauseVideo').on('click', event => {
-          let data = { event: 'pause', time: player.getCurrentTime() };
-          socket.emit('playerEvent', data);
-        });
-
-        socket.on('playerEvent', function(data) {
-          if (data.event == 'play') {
-            player.playVideo();
-          } else if (data.event == 'pause') {
-            player.playVideo();
-          }
-        });
-      }
-
-      // function buttonHandlers() {
-      //   $('#playVideo').on('click', event => {
-      //     player.playVideo();
-      //   });
-      //   $('#pauseVideo').on('click', event => {
-      //     player.pauseVideo();
-      //   });
-      // }
     </script>
-    <!-- <script src="/socket.io/socket.io.js" type="text/javascript"></script>
-    <script>
-
-      // $('#playVideo').on('click', event => {
-      //   socket.emit('playerEvent', 'play');
-      // });
-
-      // $('#pauseVideo').on('click', event => {
-      //   socket.emit('playerEvent', 'pause');
-      // });
-
-      let progressBar = $('#progressBar');
-
-      progressBar.on('click', event => {
-        let seekFraction =
-          (event.pageX - progressBar.offset().left) / progressBar.width();
-        socket.emit('seekPlayerEvent', seekFraction * player.getDuration());
-      });
-    </script> -->
   </body>
 </html>
